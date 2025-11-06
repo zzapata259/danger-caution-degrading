@@ -55,6 +55,11 @@ export const routes: Routes = [
     path: 'camara',
     loadComponent: () => import('./camara/camara.page').then( m => m.CamaraPage)
   },
+  {
+    path: 'barritas-extranjeras',
+    loadComponent: () => import('./barritas-extranjeras/barritas-extranjeras.page').then( m => m.BarritasExtranjerasPage)
+
+  },
 
 
 

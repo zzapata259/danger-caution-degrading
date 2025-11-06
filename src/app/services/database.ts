@@ -50,55 +50,34 @@ export class Database {
       console.error("❌ Error al crear la base de datos", e);
     }
   }
-
+  
+  private async asegurarBDLista() {
+    if (!this.db) {
+      console.log('⚙️ La base de datos no está lista. Creándola...');
+      await this.crearBD();
+    }
+  }
+  
   /**
    * ➕ Inserta una barrita en la tabla
    */
   async insertarBarrita(barrita: Barrita) {
     try {
-      if (!this.db) {
-        console.warn('⚠️ La base de datos no está inicializada.');
-        return;
-      }
-
+      await this.asegurarBDLista(); // 👈 asegúrate de que la BD esté lista
       const { nombre, descripcion, precio, imagen } = barrita;
-
-      await this.db.executeSql(
+      await this.db!.executeSql(
         `INSERT INTO barritas (nombre, descripcion, precio, imagen)
          VALUES (?, ?, ?, ?)`,
         [nombre, descripcion, precio, imagen]
       );
-
       console.log(`✅ Barrita "${nombre}" insertada correctamente`);
     } catch (e) {
       console.error('❌ Error al insertar barrita', e);
     }
   }
+  
 
-  /**
-   * 📋 Obtiene todas las barritas almacenadas
-   */
-  async obtenerBarritas(): Promise<Barrita[]> {
-    try {
-      if (!this.db) {
-        console.warn('⚠️ La base de datos no está inicializada.');
-        return [];
-      }
-
-      const result = await this.db.executeSql('SELECT * FROM barritas', []);
-      const barritas: Barrita[] = [];
-
-      for (let i = 0; i < result.rows.length; i++) {
-        barritas.push(result.rows.item(i));
-      }
-
-      console.log(`📋 Se obtuvieron ${barritas.length} barritas`);
-      return barritas;
-    } catch (e) {
-      console.error('❌ Error al obtener barritas', e);
-      return [];
-    }
-  }
+  
 
   /**
    * 🗑️ Elimina una barrita por su ID
@@ -138,4 +117,31 @@ export class Database {
       return [];
     }
   }
+
+
+  /**
+   * 📋 Obtiene todas las barritas almacenadas
+   */
+  async obtenerBarritas(): Promise<Barrita[]> {
+    try {
+      if (!this.db) {
+        console.warn('⚠️ La base de datos no está inicializada.');
+        return [];
+      }
+
+      const result = await this.db.executeSql('SELECT * FROM barritas', []);
+      const barritas: Barrita[] = [];
+
+      for (let i = 0; i < result.rows.length; i++) {
+        barritas.push(result.rows.item(i));
+      }
+
+      console.log(`📋 Se obtuvieron ${barritas.length} barritas`);
+      return barritas;
+    } catch (e) {
+      console.error('❌ Error al obtener barritas', e);
+      return [];
+    }
+  }
 }
+

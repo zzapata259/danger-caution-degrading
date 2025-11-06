@@ -89,3 +89,12 @@ ion-label {
   100% { transform: scale(1); }
 }
 
+.saludo-gif {
+  text-align: center;
+
+  img.gif-animado {
+    width: 200px;
+    border-radius: 10px;
+    margin-top: 10px;
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "barritas_extranjeras": [
+    {
+      "id": 1,
+      "nombre": "Quest Bar - Chocolate Chip Cookie Dough",
+      "descripcion": "Barrita proteica alta en fibra y proteínas.",
+      "precio": 3.5,
+      "imagen": "https://images.unsplash.com/photo-1600271886742-f04b8a4cde1e"
+    },
+    {
+      "id": 2,
+      "nombre": "Grenade Carb Killa - Fudge Brownie",
+      "descripcion": "Alta en proteína y con bajo azúcar.",
+      "precio": 4.0,
+      "imagen": "https://images.unsplash.com/photo-1615485737457-d6b5d3bb6e9b"
+    },
+    {
+      "id": 3,
+      "nombre": "Fulfil Vitamin & Protein Bar",
+      "descripcion": "Barrita con vitaminas y proteína ideal para snack saludable.",
+      "precio": 3.8,
+      "imagen": "https://images.unsplash.com/photo-1601050690597-7f3c924a6490"
+    }
+  ]
+}

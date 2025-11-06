@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import {
   IonHeader, IonToolbar, IonTitle, IonContent, IonMenuButton, IonMenu,
-  IonButtons, IonLabel, IonIcon, IonList, IonItem, IonListHeader
+  IonButtons, IonLabel, IonIcon, IonList, IonItem, IonListHeader, IonSpinner
 } from '@ionic/angular/standalone';
 import { Router, RouterModule } from '@angular/router';
-import { PostService, Post, SaludoGif } from '../services/post'; // ✅ Cambio aquí
+import { PostService, Post, SaludoGif,  } from '../services/post'; // ✅ Cambio aquí
 import { addIcons } from 'ionicons';
 import { logOutOutline } from 'ionicons/icons';
 
@@ -15,7 +15,7 @@ import { logOutOutline } from 'ionicons/icons';
   imports: [
     IonHeader, IonToolbar, IonTitle, IonContent,
     IonButtons, IonMenu, IonMenuButton, IonLabel,
-    IonIcon, IonList, IonItem, IonListHeader, RouterModule
+    IonIcon, IonList, IonItem, IonListHeader, RouterModule,IonSpinner
   ]
 })
 export class HomePage {
@@ -43,7 +43,13 @@ export class HomePage {
       next: (data) => this.saludoGif = data,
       error: (err) => console.error('Error al obtener saludo GIF', err)
     });
+
+    this.postService.getPosts().subscribe(posts => {
+      this.listadoPosts = posts;
+    });
+    
   }
+  
 
   logout() {
     sessionStorage.setItem('isLoggedIn', 'false');

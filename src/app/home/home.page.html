@@ -1,6 +1,9 @@
 <!-- Encabezado superior -->
 <ion-header [translucent]="true">
   <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
     <ion-title>Inicio</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -46,6 +49,14 @@
         <ion-icon name="basket-outline" slot="start"></ion-icon>
         <ion-label>Carrito</ion-label>
       </ion-item>
+      <!-- 📷 Cámara -->
+    <ion-list>
+      <ion-list-header>Utilidades</ion-list-header>
+      <ion-item routerLink="/camara" class="camara">
+        <ion-icon name="camera-outline" slot="start"></ion-icon>
+        <ion-label>Cámara</ion-label>
+      </ion-item>
+    </ion-list>
     </ion-list>
 
     <!-- Cerrar sesión -->
@@ -60,31 +71,24 @@
 
 <!-- Contenido principal -->
 <div class="ion-page" id="main-content">
-  <ion-header>
-    <ion-toolbar color="primary">
-      <ion-buttons slot="start">
-        <ion-menu-button></ion-menu-button>
-      </ion-buttons>
-      <ion-title>Inicio</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
   <ion-content class="ion-padding">
 
     <!-- Bienvenida -->
     <h2>Bienvenido 👋 {{ email }}</h2>
-    <p>Desde aquí podrás acceder a tus ejercicios, la tienda y pronto las noticias.</p>
+    <p>Desde aquí podrás acceder a tus ejercicios, la tienda y más.</p>
 
     <!-- GIF de saludo animado -->
-<div *ngIf="saludoGif as sg" class="saludo-gif ion-text-center ion-margin-top">
-  <p class="ion-text-capitalize">{{ sg.mensaje }}</p>
-  <img [src]="sg.gif" alt="Saludo animado" class="gif-animado" />
-</div>
+    <div *ngIf="saludoGif as sg" class="saludo-gif ion-text-center ion-margin-top">
+      <p class="ion-text-capitalize">{{ sg.mensaje }}</p>
+      <img [src]="sg.gif" alt="Saludo animado" class="gif-animado" />
+    </div>
 
+    <!-- Cargando... -->
+    <ion-spinner *ngIf="listadoPosts.length === 0 && !saludoGif" name="crescent"></ion-spinner>
 
     <!-- Lista de posts -->
     <ion-list *ngIf="listadoPosts.length > 0" class="ion-margin-top">
-      <ion-list-header>Posts</ion-list-header>
+      <ion-list-header>Posts Recientes</ion-list-header>
       <ion-item *ngFor="let post of listadoPosts">
         <ion-label>
           <h3>{{ post.title }}</h3>

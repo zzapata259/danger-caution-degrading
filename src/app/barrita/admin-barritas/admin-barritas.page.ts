@@ -67,7 +67,52 @@ export class AdminBarritasPage implements OnInit {
   async inicializarBD() {
     await this.database.crearBD();
     this.barritas = await this.database.obtenerTodasBarritas();
+  
+    // Si la tabla está vacía, insertamos 4 barritas de ejemplo
+    if (this.barritas.length === 0) {
+      const barritasIniciales = [
+        {
+          nombre: 'Barrita ChocoPower',
+          descripcion: 'Deliciosa barrita de chocolate con 20g de proteína.',
+          precio: 1200,
+          imagen: 'https://cdn-icons-png.flaticon.com/512/415/415733.png'
+        },
+        {
+          nombre: 'Barrita Frutos Rojos',
+          descripcion: 'Con avena, frutos secos y proteína vegetal.',
+          precio: 1000,
+          imagen: 'https://cdn-icons-png.flaticon.com/512/706/706195.png'
+        },
+        {
+          nombre: 'Barrita Vainilla Crunch',
+          descripcion: 'Crujiente y suave con sabor a vainilla natural.',
+          precio: 1300,
+          imagen: 'https://cdn-icons-png.flaticon.com/512/706/706164.png'
+        },
+        {
+          nombre: 'Barrita Tropical Fit',
+          descripcion: 'Sabor mango-piña con proteína y fibra.',
+          precio: 1500,
+          imagen: 'https://cdn-icons-png.flaticon.com/512/706/706151.png'
+        }
+      ];
+  
+      for (const b of barritasIniciales) {
+        await this.database.insertarBarrita(b as any);
+      }
+  
+      // Volvemos a cargar las barritas
+      this.barritas = await this.database.obtenerTodasBarritas();
+  
+      const toast = await this.toastCtrl.create({
+        message: '✅ Barritas iniciales agregadas automáticamente.',
+        duration: 2500,
+        color: 'success'
+      });
+      toast.present();
+    }
   }
+  
 
   // 🆕 Método para insertar una nueva barrita
   async insertarBarrita() {

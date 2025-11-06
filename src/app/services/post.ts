@@ -19,16 +19,17 @@ export interface SaludoGif {
 })
 export class PostService {  // ✅ cambio de nombre aquí
 
-  private urlApi = "https://jsonplaceholder.typicode.com/posts";
+  private mockUrl = "https://demo8984564.mockable.io/barritasextranjeras"; // ✅ usa HTTPS
   private urlSaludo = "https://demo8984564.mockable.io/saludoGif"; // ✅ usa HTTPS
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(private http: HttpClient) {}
 
+  // Obtener las barritas desde tu Mock
   getPosts(): Observable<Post[]> {
-    return this.httpClient.get<Post[]>(this.urlApi);
+    return this.http.get<Post[]>(this.mockUrl);
   }
 
   getSaludoGif(): Observable<SaludoGif> {
-    return this.httpClient.get<SaludoGif>(this.urlSaludo);
+    return this.http.get<SaludoGif>(this.urlSaludo);
   }
 }

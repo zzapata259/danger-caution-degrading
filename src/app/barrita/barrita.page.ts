@@ -1,11 +1,14 @@
-import { CommonModule } from '@angular/common';
-import { IonicModule, ToastController } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
+import { ToastController } from '@ionic/angular';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonHeader,IonToolbar,IonTitle,IonContent,IonMenuButton,IonMenu,IonButtons,IonLabel, IonIcon,IonList,IonItem,IonListHeader,IonButton,
-IonGrid,IonRow,IonCol,IonCard,IonCardHeader,IonCardTitle,IonCardSubtitle,IonCardContent,IonChip, IonAvatar,IonNote,} from '@ionic/angular/standalone';
-import { RouterModule } from '@angular/router';
-import { Barrita, Database } from 'src/app/services/database';
+import {
+  IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonMenuButton,
+  IonButton, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent,
+  IonGrid, IonRow, IonCol, IonIcon, IonText
+} from '@ionic/angular/standalone';
+import { RouterModule, Router } from '@angular/router';
+import { Database, Barrita } from 'src/app/services/database';
 
 @Component({
   selector: 'app-barrita',
@@ -16,55 +19,90 @@ import { Barrita, Database } from 'src/app/services/database';
     CommonModule,
     FormsModule,
     RouterModule,
-    // Ionic components
     IonHeader,
     IonToolbar,
     IonTitle,
     IonContent,
     IonButtons,
-    IonMenu,
     IonMenuButton,
-    IonLabel,
-    IonIcon,
-    IonList,
-    IonItem,
-    IonListHeader,
     IonButton,
-    IonGrid,
-    IonRow,
-    IonCol,
     IonCard,
     IonCardHeader,
     IonCardTitle,
     IonCardSubtitle,
     IonCardContent,
-    IonChip,
-    IonAvatar,
-    IonNote,
-  ],
+    IonGrid,
+    IonRow,
+    IonCol,
+    IonIcon,
+    IonText
+  ]
 })
-export class BarritaPage {
-   // 🟢 Variables
+export class BarritaPage implements OnInit {
   barritas: Barrita[] = [];
   carrito: Barrita[] = [];
 
-  constructor(private toastCtrl: ToastController, private database : Database) {
-    this.inicializarBD();
-    this.obtenerTodasBarritas();
-  }
-  // 🔹 Obtiene las barritas desde la BD
-  async obtenerTodasBarritas() {
-    this.barritas = await this.database.obtenerTodasBarritas();
-    console.log('📦 Barritas cargadas:', this.barritas);
-  }
+  constructor(
+    private toastCtrl: ToastController,
+    private database: Database,
+    private router: Router
+  ) {}
 
-  // 🧩 Cuando se carga la página
   async ngOnInit() {
-    await this.obtenerTodasBarritas();
+    console.log('🟢 Iniciando BarritaPage...');
+    await this.database.crearBD();
+    await this.cargarBarritas();
   }
 
-  async inicializarBD() {
-    this.barritas = await this.database.obtenerBarritas();
+  async ionViewWillEnter() {
+    await this.cargarBarritas();
+  }
+
+  async cargarBarritas() {
+    try {
+      this.barritas = await this.database.obtenerTodasBarritas();
+      console.log('🍫 Barritas cargadas:', this.barritas);
+
+      if (this.barritas.length === 0) {
+        console.warn('⚠️ No se encontraron barritas, insertando ejemplos...');
+        await this.insertarEjemplo();
+        this.barritas = await this.database.obtenerTodasBarritas();
+      }
+    } catch (e) {
+      console.error('❌ Error al cargar barritas:', e);
+    }
+  }
+
+  async insertarEjemplo() {
+    const ejemplos: Barrita[] = [
+      {
+        id: 0,
+        nombre: 'Barrita de Chocolate',
+        descripcion: 'Proteína sabor chocolate',
+        precio: 1200,
+        imagen: 'https://cdn-icons-png.flaticon.com/512/1046/1046784.png'
+      },
+      {
+        id: 0,
+        nombre: 'Barrita de Maní',
+        descripcion: 'Alta en proteínas y baja en azúcar',
+        precio: 1000,
+        imagen: 'https://cdn-icons-png.flaticon.com/512/415/415733.png'
+      },
+      {
+        id: 0,
+        nombre: 'Barrita de Avena',
+        descripcion: 'Ideal para energía duradera',
+        precio: 1100,
+        imagen: 'https://cdn-icons-png.flaticon.com/512/415/415734.png'
+      }
+    ];
+
+    for (let b of ejemplos) {
+      await this.database.insertarBarrita(b);
+    }
+
+    console.log('✅ Ejemplos insertados en la base de datos');
   }
 
   async agregarAlCarrito(barrita: Barrita) {
@@ -76,6 +114,19 @@ export class BarritaPage {
       duration: 2000,
       color: 'success'
     });
-    toast.present();
+    await toast.present();
+  }
+
+  // 🔹 Navegar al carrito
+  irAlCarrito() {
+    this.router.navigate(['/carrito']);
+  }
+
+  // 🔹 Volver al Home
+  irAlHome() {
+    this.router.navigate(['/home']);
+  }
+  irABarritasExtranjeras() {
+    this.router.navigate(['/barritas-extranjeras']);
   }
 }

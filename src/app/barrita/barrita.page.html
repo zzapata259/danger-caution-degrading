@@ -1,21 +1,43 @@
 <ion-header>
   <ion-toolbar color="primary">
-    <ion-title>Barritas de Proteínas</ion-title>
-    <ion-buttons slot="end">
-      <ion-button routerLink="/carrito">
-        <ion-icon name="cart-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
+    <ion-title>Barritas</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
 
-  <ion-grid>
+  <!-- 🏠 Botón para volver al Home -->
+  <ion-button expand="block" color="secondary" class="ion-margin-bottom" (click)="irAlHome()">
+    <ion-icon slot="start" name="home-outline"></ion-icon>
+    Ir al inicio
+  </ion-button>
+
+  <!-- 🛒 Botón para ir al carrito -->
+  <ion-button expand="block" color="warning" class="ion-margin-bottom" (click)="irAlCarrito()">
+    <ion-icon slot="start" name="cart-outline"></ion-icon>
+    Ver carrito
+  </ion-button>
+
+  <!-- 🌍 Botón para ir a barritas extranjeras -->
+  <ion-button expand="block" color="tertiary" class="ion-margin-bottom" (click)="irABarritasExtranjeras()">
+    <ion-icon slot="start" name="globe-outline"></ion-icon>
+    Ver barritas extranjeras
+  </ion-button>
+
+  <!-- Si no hay barritas -->
+  <div *ngIf="barritas.length === 0" class="ion-text-center ion-padding">
+    <ion-text color="medium">
+      No hay barritas registradas 😕
+    </ion-text>
+  </div>
+
+  <!-- Si hay barritas -->
+  <ion-grid *ngIf="barritas.length > 0">
     <ion-row>
       <ion-col size="12" size-md="6" *ngFor="let barrita of barritas">
         <ion-card>
-          <img [src]="barrita.imagen" alt="{{barrita.nombre}}">
+          <img [src]="barrita.imagen" alt="{{barrita.nombre}}" 
+               style="width: 100%; height: 180px; object-fit: contain;">
           <ion-card-header>
             <ion-card-title>{{ barrita.nombre }}</ion-card-title>
             <ion-card-subtitle>\${{ barrita.precio }}</ion-card-subtitle>
@@ -33,4 +55,3 @@
   </ion-grid>
 
 </ion-content>
-
