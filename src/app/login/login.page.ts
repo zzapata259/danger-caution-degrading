@@ -1,7 +1,14 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonToast, IonItem, IonButton, IonInputPasswordToggle, IonInput, createAnimation } from '@ionic/angular/standalone';
+import {
+  IonToast,
+  IonItem,
+  IonButton,
+  IonInputPasswordToggle,
+  IonInput,
+  createAnimation
+} from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
 import { DatabaseUsuario } from '../services/databaseusuario';
 
@@ -28,7 +35,7 @@ export class LoginPage implements OnInit {
   ) {}
 
   async ngOnInit() {
-    await this.dbService.crearBDUsuario(); // asegurarse de que la DB exista
+    // ❗ Ya NO se llama crearBDUsuario() aquí
     sessionStorage.setItem('isLoggedIn', 'false');
   }
 
@@ -47,7 +54,9 @@ export class LoginPage implements OnInit {
         sessionStorage.setItem('userEmail', correo);
         this.router.navigateByUrl('/home');
       }, 600);
+
     } else {
+
       if (this.emailInput) this.emailInput.nativeElement.blur();
       if (this.passwordInput) this.passwordInput.nativeElement.blur();
 

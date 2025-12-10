@@ -4,9 +4,10 @@ import {
   IonButtons, IonLabel, IonIcon, IonList, IonItem, IonListHeader, IonSpinner
 } from '@ionic/angular/standalone';
 import { Router, RouterModule } from '@angular/router';
-import { PostService, Post, SaludoGif,  } from '../services/post'; // ✅ Cambio aquí
+import { PostService, Post, SaludoGif } from '../services/post';
 import { addIcons } from 'ionicons';
 import { logOutOutline } from 'ionicons/icons';
+import { DatabaseUsuario, Usuario } from '../services/databaseusuario';
 
 @Component({
   selector: 'app-home',
@@ -19,26 +20,33 @@ import { logOutOutline } from 'ionicons/icons';
   ]
 })
 export class HomePage {
-  email: string = "";
+  usuario?: Usuario; // 👈 guardamos el usuario completo
   listadoPosts: Post[] = [];
-  saludoGif?: SaludoGif; // ← uso seguro (opcional)
+  saludoGif?: SaludoGif;
 
-  constructor(private router: Router, private postService: PostService) { // ✅ cambio aquí
+  constructor(
+    private router: Router,
+    private postService: PostService,
+    private dbService: DatabaseUsuario
+  ) {
     addIcons({ logOutOutline });
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     const storedEmail = sessionStorage.getItem('userEmail');
-    if (storedEmail) this.email = storedEmail;
+    if (storedEmail) {
+      // Obtenemos todos los usuarios y filtramos por correo
+      const usuarios = await this.dbService.obtenerUsuarios();
+      this.usuario = usuarios.find(u => u.correo === storedEmail);
+    }
 
-    // Cargar posts (de JSONPlaceholder)
+    // Cargar posts
     setTimeout(() => {
       this.postService.getPosts().subscribe(posts => {
         this.listadoPosts = posts;
       });
     }, 2000);
 
-    // Cargar saludo animado (de Mockable)
     this.postService.getSaludoGif().subscribe({
       next: (data) => this.saludoGif = data,
       error: (err) => console.error('Error al obtener saludo GIF', err)
@@ -47,13 +55,15 @@ export class HomePage {
     this.postService.getPosts().subscribe(posts => {
       this.listadoPosts = posts;
     });
-    
   }
-  
 
   logout() {
     sessionStorage.setItem('isLoggedIn', 'false');
     console.log('Cerrando sesión...');
     this.router.navigateByUrl('/login', { replaceUrl: true });
+  }
+
+  irEditarPerfil() {
+    this.router.navigateByUrl('/perfil');
   }
 }

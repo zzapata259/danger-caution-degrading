@@ -14,6 +14,9 @@ import { DatabaseUsuario } from '../services/databaseusuario';
 })
 export class RegisterPage implements OnInit {
 
+  nombre: string = '';
+  apellido: string = '';
+  edad!: number; // número
   correo: string = '';
   password: string = '';
   isToastOpen: boolean = false;
@@ -29,7 +32,7 @@ export class RegisterPage implements OnInit {
   }
 
   async register() {
-    if (!this.correo || !this.password) {
+    if (!this.nombre || !this.apellido || !this.edad || !this.correo || !this.password) {
       this.toastMessage = 'Debe llenar todos los campos';
       this.isToastOpen = true;
       return;
@@ -38,6 +41,9 @@ export class RegisterPage implements OnInit {
     try {
       await this.dbService.insertarUsuario({
         id: 0, // SQLite autoincrementa
+        nombre: this.nombre,
+        apellido: this.apellido,
+        edad: this.edad,
         correo: this.correo,
         password: this.password
       });
@@ -52,6 +58,8 @@ export class RegisterPage implements OnInit {
     } catch (e) {
       this.toastMessage = 'Error al registrar usuario (correo duplicado?)';
       this.isToastOpen = true;
+      console.error(e);
     }
   }
 }
+

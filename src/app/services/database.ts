@@ -4,7 +4,7 @@ import { SQLite, SQLiteObject } from '@awesome-cordova-plugins/sqlite/ngx';
 import { BarritaPage } from '../barrita/barrita.page'; // ✅ Ahora apunta a la interfaz, no al componente
 
 export interface Barrita {
-  id: number;
+  id?: number;
   nombre: string;
   descripcion: string;
   precio: number;

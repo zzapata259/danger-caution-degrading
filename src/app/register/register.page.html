@@ -1,34 +1,59 @@
-<div class="register-container">
-  <div class="logo-container">
-    <img src="../../assets/img/image.png" alt="Logo" class="logo-img" />
-  </div>
+<form (ngSubmit)="register()">
 
-  <form (ngSubmit)="register()">
-    <ion-item>
-      <ion-input
-        type="email"
-        placeholder="correo@dominio.com"
-        [(ngModel)]="correo"
-        name="correo"
-        required>
-      </ion-input>
-    </ion-item>
+  <ion-item>
+    <ion-input
+      type="text"
+      placeholder="Nombre"
+      [(ngModel)]="nombre"
+      name="nombre"
+      required>
+    </ion-input>
+  </ion-item>
 
-    <ion-item class="ion-margin-top">
-      <ion-input
-        type="password"
-        placeholder="Contraseña"
-        [(ngModel)]="password"
-        name="password"
-        required>
-      </ion-input>
-    </ion-item>
+  <ion-item class="ion-margin-top">
+    <ion-input
+      type="text"
+      placeholder="Apellido"
+      [(ngModel)]="apellido"
+      name="apellido"
+      required>
+    </ion-input>
+  </ion-item>
 
-    <ion-button expand="block" type="submit" class="ion-margin-top">
-      Registrarse
-    </ion-button>
-  </form>
-</div>
+  <ion-item class="ion-margin-top">
+    <ion-input
+      type="number"
+      placeholder="Edad"
+      [(ngModel)]="edad"
+      name="edad"
+      required>
+    </ion-input>
+  </ion-item>
+
+  <ion-item class="ion-margin-top">
+    <ion-input
+      type="email"
+      placeholder="correo@dominio.com"
+      [(ngModel)]="correo"
+      name="correo"
+      required>
+    </ion-input>
+  </ion-item>
+
+  <ion-item class="ion-margin-top">
+    <ion-input
+      type="password"
+      placeholder="Contraseña"
+      [(ngModel)]="password"
+      name="password"
+      required>
+    </ion-input>
+  </ion-item>
+
+  <ion-button expand="block" type="submit" class="ion-margin-top">
+    Registrarse
+  </ion-button>
+</form>
 
 <ion-toast
   [isOpen]="isToastOpen"

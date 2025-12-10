@@ -1,33 +1,52 @@
-import { Component, OnInit } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
-import { IonSpinner, IonLabel, IonItem, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonButtons, IonIcon } from '@ionic/angular/standalone';
-import { addIcons } from 'ionicons';
-import { logOutOutline } from 'ionicons/icons';
-import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+import { Database, Barrita } from '../services/database';
 
 @Component({
   selector: 'app-camara',
   templateUrl: './camara.page.html',
-  styleUrls: ['./camara.page.scss'],
-  standalone: true,
-  imports: [IonSpinner, CommonModule, IonLabel, IonItem, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, RouterModule, IonButtons, IonIcon, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle]
+  styleUrls: ['./camara.page.scss']
 })
-export class CamaraPage implements OnInit {
+export class CamaraPage {
+  
+  nombre = '';
+  descripcion = '';
+  precio: number | null = null;
   foto: string | undefined;
 
-  constructor() { }
+  constructor(private dbBarritas: Database) { }
 
-  ngOnInit() {
-  }
   async tomarFoto() {
     const imagen = await Camera.getPhoto({
-      quality: 80, // calidad de la foto (0-100)
-      resultType: CameraResultType.Uri, // queremos una URL, no base64
-      source: CameraSource.Prompt, // pregunta si usar cámara o galería
+      quality: 80,
+      resultType: CameraResultType.Base64,
+      source: CameraSource.Prompt
     });
 
-    this.foto = imagen.webPath; // ruta para mostrar la imagen
+    this.foto = 'data:image/jpeg;base64,' + imagen.base64String;
   }
 
+  async guardarBarrita() {
+    if (!this.nombre || !this.descripcion || this.precio === null || !this.foto) {
+      console.warn('⚠️ Completa todos los campos antes de guardar');
+      return;
+    }
+
+    const nuevaBarrita: Barrita = {
+      nombre: this.nombre,
+      descripcion: this.descripcion,
+      precio: this.precio,
+      imagen: this.foto
+    };
+
+    await this.dbBarritas.insertarBarrita(nuevaBarrita);
+    console.log('✅ Barrita guardada con foto, nombre, descripción y precio!');
+
+    // Limpiar campos
+    this.nombre = '';
+    this.descripcion = '';
+    this.precio = null;
+    this.foto = undefined;
+  }
 }
+

@@ -1,0 +1,44 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>Editar Perfil</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <form (ngSubmit)="guardarCambios()">
+
+    <ion-item>
+      <ion-input placeholder="Nombre" [(ngModel)]="nombre" name="nombre"></ion-input>
+    </ion-item>
+
+    <ion-item class="ion-margin-top">
+      <ion-input placeholder="Apellido" [(ngModel)]="apellido" name="apellido"></ion-input>
+    </ion-item>
+
+    <ion-item class="ion-margin-top">
+      <ion-input type="email" placeholder="Correo" [(ngModel)]="correo" name="correo"></ion-input>
+    </ion-item>
+
+    <ion-item class="ion-margin-top">
+      <ion-input type="password" placeholder="Contraseña" [(ngModel)]="password" name="password"></ion-input>
+    </ion-item>
+
+    <ion-item class="ion-margin-top">
+      <ion-input type="number" placeholder="Edad" [(ngModel)]="edad" name="edad"></ion-input>
+    </ion-item>
+
+    <ion-button expand="block" class="ion-margin-top" type="submit" color="secondary">
+      Guardar Cambios
+    </ion-button>
+
+  </form>
+
+  <ion-toast
+    [isOpen]="isToastOpen"
+    [message]="toastMessage"
+    [duration]="3000"
+    (didDismiss)="isToastOpen = false">
+  </ion-toast>
+
+</ion-content>
